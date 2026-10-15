@@ -463,7 +463,75 @@
         }
       ],
       "file": "clip_1_score53.mp4"
-    }
+    },
+    "quality_score": 79.5,
+    "quality_tier": "REVIEW",
+    "technical_status": "PASS",
+    "technical_issues": [
+      "missing_audio_stream"
+    ],
+    "quality_breakdown": {
+      "hook_strength": {
+        "score": 48.0,
+        "weight": 0.2,
+        "weighted_score": 9.6,
+        "details": "Hook words (who); Weak connector start ('because')"
+      },
+      "emotional_impact": {
+        "score": 73.0,
+        "weight": 0.15,
+        "weighted_score": 10.95,
+        "details": "3 high-arousal words"
+      },
+      "protagonist_visibility": {
+        "score": 100.0,
+        "weight": 0.15,
+        "weighted_score": 15.0,
+        "details": "Protagonist tracked in 90% of frames; High subject prominence"
+      },
+      "pacing": {
+        "score": 98.0,
+        "weight": 0.15,
+        "weighted_score": 14.7,
+        "details": "2.4 words/sec; Optimal viral delivery rhythm; Continuous tight pacing"
+      },
+      "story_continuity": {
+        "score": 88.0,
+        "weight": 0.1,
+        "weighted_score": 8.8,
+        "details": "Clean sentence termination; Complete opening thought"
+      },
+      "audio_synchronization": {
+        "score": 65.0,
+        "weight": 0.1,
+        "weighted_score": 6.5,
+        "details": "Acoustic cadence tracking (music beats subtle)"
+      },
+      "visual_composition": {
+        "score": 100.0,
+        "weight": 0.1,
+        "weighted_score": 10.0,
+        "details": "Platform-standard 9:16 vertical ratio; Subject framed in center third; Compliant with mobile UI safe margins"
+      },
+      "ending_rewatchability": {
+        "score": 80.0,
+        "weight": 0.05,
+        "weighted_score": 4.0,
+        "details": "Seamless loop compatible"
+      }
+    },
+    "applied_enhancements": [
+      "beat_synced_flash",
+      "audio_ducking",
+      "quality_scoring",
+      "pattern_interrupt",
+      "zoom_3pct",
+      "audio_boundary_fades",
+      "monetization_labels",
+      "protagonist_tracking_9_16",
+      "hook_commentary"
+    ],
+    "selection_reasoning": "Ranked as REVIEW based on steady protagonist centering, complete narrative thought."
   },
   {
     "rank": 2,
@@ -1019,7 +1087,75 @@
         }
       ],
       "file": "clip_2_score47.mp4"
-    }
+    },
+    "quality_score": 78.0,
+    "quality_tier": "REVIEW",
+    "technical_status": "PASS",
+    "technical_issues": [
+      "missing_audio_stream"
+    ],
+    "quality_breakdown": {
+      "hook_strength": {
+        "score": 36.0,
+        "weight": 0.2,
+        "weighted_score": 7.2,
+        "details": "Weak connector start ('so')"
+      },
+      "emotional_impact": {
+        "score": 79.0,
+        "weight": 0.15,
+        "weighted_score": 11.85,
+        "details": "2 high-arousal words; Expressive punctuation"
+      },
+      "protagonist_visibility": {
+        "score": 100.0,
+        "weight": 0.15,
+        "weighted_score": 15.0,
+        "details": "Protagonist tracked in 90% of frames; High subject prominence"
+      },
+      "pacing": {
+        "score": 98.0,
+        "weight": 0.15,
+        "weighted_score": 14.7,
+        "details": "2.9 words/sec; Optimal viral delivery rhythm; Continuous tight pacing"
+      },
+      "story_continuity": {
+        "score": 88.0,
+        "weight": 0.1,
+        "weighted_score": 8.8,
+        "details": "Clean sentence termination; Complete opening thought"
+      },
+      "audio_synchronization": {
+        "score": 65.0,
+        "weight": 0.1,
+        "weighted_score": 6.5,
+        "details": "Acoustic cadence tracking (music beats subtle)"
+      },
+      "visual_composition": {
+        "score": 100.0,
+        "weight": 0.1,
+        "weighted_score": 10.0,
+        "details": "Platform-standard 9:16 vertical ratio; Subject framed in center third; Compliant with mobile UI safe margins"
+      },
+      "ending_rewatchability": {
+        "score": 80.0,
+        "weight": 0.05,
+        "weighted_score": 4.0,
+        "details": "Seamless loop compatible"
+      }
+    },
+    "applied_enhancements": [
+      "beat_synced_flash",
+      "audio_ducking",
+      "quality_scoring",
+      "pattern_interrupt",
+      "zoom_3pct",
+      "audio_boundary_fades",
+      "monetization_labels",
+      "protagonist_tracking_9_16",
+      "hook_commentary"
+    ],
+    "selection_reasoning": "Ranked as REVIEW based on high emotional/action intensity, steady protagonist centering, complete narrative thought."
   },
   {
     "rank": 3,
@@ -1555,6 +1691,74 @@
         }
       ],
       "file": "clip_3_score46.mp4"
-    }
+    },
+    "quality_score": 80.8,
+    "quality_tier": "PRIORITY",
+    "technical_status": "PASS",
+    "technical_issues": [
+      "missing_audio_stream"
+    ],
+    "quality_breakdown": {
+      "hook_strength": {
+        "score": 50.0,
+        "weight": 0.2,
+        "weighted_score": 10.0,
+        "details": "Average opening hook"
+      },
+      "emotional_impact": {
+        "score": 79.0,
+        "weight": 0.15,
+        "weighted_score": 11.85,
+        "details": "4 high-arousal words"
+      },
+      "protagonist_visibility": {
+        "score": 100.0,
+        "weight": 0.15,
+        "weighted_score": 15.0,
+        "details": "Protagonist tracked in 90% of frames; High subject prominence"
+      },
+      "pacing": {
+        "score": 98.0,
+        "weight": 0.15,
+        "weighted_score": 14.7,
+        "details": "2.7 words/sec; Optimal viral delivery rhythm; Continuous tight pacing"
+      },
+      "story_continuity": {
+        "score": 88.0,
+        "weight": 0.1,
+        "weighted_score": 8.8,
+        "details": "Clean sentence termination; Complete opening thought"
+      },
+      "audio_synchronization": {
+        "score": 65.0,
+        "weight": 0.1,
+        "weighted_score": 6.5,
+        "details": "Acoustic cadence tracking (music beats subtle)"
+      },
+      "visual_composition": {
+        "score": 100.0,
+        "weight": 0.1,
+        "weighted_score": 10.0,
+        "details": "Platform-standard 9:16 vertical ratio; Subject framed in center third; Compliant with mobile UI safe margins"
+      },
+      "ending_rewatchability": {
+        "score": 80.0,
+        "weight": 0.05,
+        "weighted_score": 4.0,
+        "details": "Seamless loop compatible"
+      }
+    },
+    "applied_enhancements": [
+      "beat_synced_flash",
+      "audio_ducking",
+      "quality_scoring",
+      "pattern_interrupt",
+      "zoom_3pct",
+      "audio_boundary_fades",
+      "monetization_labels",
+      "protagonist_tracking_9_16",
+      "hook_commentary"
+    ],
+    "selection_reasoning": "Ranked as PRIORITY based on high emotional/action intensity, steady protagonist centering, complete narrative thought."
   }
 ]

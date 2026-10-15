@@ -47,6 +47,14 @@ from moviepy.editor import (
 )
 from scipy.io import wavfile
 
+from ClipQualityEngine import (
+    quality_engine,
+    BeatDetector,
+    ProtagonistTracker,
+    AudioMastering,
+    QualityEvaluation,
+)
+
 
 # ─────────────────────────────────────────────────────────────────
 # Data Models
@@ -61,12 +69,19 @@ class CaptionPhrase:
 
 @dataclass
 class Segment:
-    start:           float
-    end:             float
-    transcript:      str  = ""
-    caption_phrases: list = field(default_factory=list)
-    energy:          float = 0.0
-    viral_score:     float = 0.0
+    start:                float
+    end:                  float
+    transcript:           str   = ""
+    caption_phrases:      list  = field(default_factory=list)
+    energy:               float = 0.0
+    viral_score:          float = 0.0
+    quality_score:        float = 0.0
+    quality_tier:         str   = "REVIEW"
+    technical_status:     str   = "PASS"
+    technical_issues:     list  = field(default_factory=list)
+    quality_breakdown:    dict  = field(default_factory=dict)
+    applied_enhancements: list  = field(default_factory=list)
+    selection_reasoning:  str   = ""
 
     @property
     def duration(self) -> float:
@@ -441,50 +456,119 @@ def build_and_score_segments(
 
     word_starts = [w["start"] for w in all_words]
 
-    raw: list[Segment] = []
-    texts: list[str]   = []
-    cur_start = sent_segs[0]["start"]
-    cur_end   = sent_segs[0]["end"]
+    # Pre-detect rhythmic beats from audio for cut synchronization
+    beats = BeatDetector.detect_beats(audio, rate)
 
-    def flush():
-        if texts:
-            raw.append(Segment(
-                start=cur_start, end=cur_end, transcript=" ".join(texts)
-            ))
+    candidates: list[Segment] = []
+    n_sents = len(sent_segs)
 
-    for item in sent_segs:
-        if item["end"] - cur_start > cfg.max_clip_duration and texts:
-            flush()
-            texts     = []
-            cur_start = item["start"]
-        texts.append(item["text"])
-        cur_end = item["end"]
-    flush()
+    # Sliding candidate window generator with sentence boundary integrity
+    for i in range(n_sents):
+        cur_text_list = []
+        cand_start = sent_segs[i]["start"]
 
-    segments = [s for s in raw if s.duration >= cfg.min_clip_duration]
-    if not segments:
-        return []
+        # Lookahead up to 15 sentences or max duration
+        for j in range(i, min(i + 16, n_sents)):
+            cur_text_list.append(sent_segs[j]["text"])
+            cand_end = sent_segs[j]["end"]
+            dur = cand_end - cand_start
 
-    for seg in segments:
-        seg.energy = energy_for_range(audio, rate, seg.start, seg.end)
-        seg.caption_phrases = build_caption_phrases(
-            all_words, word_starts, seg.start, seg.end, cfg.caption_words_per_phrase
+            if dur < cfg.min_clip_duration:
+                continue
+            if dur > cfg.max_clip_duration:
+                break
+
+            full_cand_text = " ".join(cur_text_list).strip()
+
+            # Natural cushion after last word (up to 250ms)
+            total_audio_sec = len(audio) / rate if rate > 0 else cand_end
+            cushioned_end = min(cand_end + 0.25, total_audio_sec)
+
+            # Evaluate candidate via 8-criteria ClipQualityEngine
+            eval_res = quality_engine.evaluate_candidate(
+                transcript=full_cand_text,
+                start_time=cand_start,
+                end_time=cushioned_end,
+                audio=audio,
+                rate=rate,
+                beats=beats,
+            )
+
+            seg = Segment(
+                start                = cand_start,
+                end                  = cushioned_end,
+                transcript           = full_cand_text,
+                energy               = energy_for_range(audio, rate, cand_start, cushioned_end),
+                viral_score          = eval_res.total_score,
+                quality_score        = eval_res.total_score,
+                quality_tier         = eval_res.quality_tier,
+                technical_status     = eval_res.technical_status,
+                technical_issues     = eval_res.technical_issues,
+                quality_breakdown    = eval_res.breakdown.to_dict(),
+                applied_enhancements = ["quality_scoring", "sentence_boundary_alignment"],
+                selection_reasoning  = eval_res.selection_reasoning,
+            )
+            seg.caption_phrases = build_caption_phrases(
+                all_words, word_starts, seg.start, seg.end, cfg.caption_words_per_phrase
+            )
+            candidates.append(seg)
+
+    if not candidates:
+        # Fallback to sequential grouping if sliding window yielded no matches
+        raw_start = sent_segs[0]["start"]
+        raw_end = sent_segs[-1]["end"]
+        raw_text = " ".join(s["text"] for s in sent_segs)
+        eval_res = quality_engine.evaluate_candidate(
+            transcript=raw_text, start_time=raw_start, end_time=raw_end,
+            audio=audio, rate=rate, beats=beats
         )
+        fallback_seg = Segment(
+            start=raw_start, end=raw_end, transcript=raw_text,
+            viral_score=eval_res.total_score, quality_score=eval_res.total_score,
+            quality_tier=eval_res.quality_tier, technical_status=eval_res.technical_status,
+            quality_breakdown=eval_res.breakdown.to_dict(),
+            selection_reasoning=eval_res.selection_reasoning,
+        )
+        fallback_seg.caption_phrases = build_caption_phrases(
+            all_words, word_starts, fallback_seg.start, fallback_seg.end, cfg.caption_words_per_phrase
+        )
+        return [fallback_seg]
 
-    max_energy = max(s.energy for s in segments) or 1.0
-    for seg in segments:
-        seg.viral_score = score_segment(seg, max_energy)
+    # Sort candidates by quality score descending
+    candidates.sort(key=lambda s: s.quality_score, reverse=True)
 
-    return sorted(segments, key=lambda s: s.viral_score, reverse=True)
+    # Non-Maximum Suppression (NMS) to eliminate near-duplicate overlapping segments
+    selected: list[Segment] = []
+    for cand in candidates:
+        overlaps = False
+        for s in selected:
+            inter = max(0.0, min(cand.end, s.end) - max(cand.start, s.start))
+            if inter > 0:
+                overlap_ratio = inter / min(cand.duration, s.duration)
+                if overlap_ratio > 0.40:
+                    overlaps = True
+                    break
+        if not overlaps:
+            selected.append(cand)
+        if len(selected) >= cfg.top_n_clips * 2:
+            break
+
+    return selected
 
 
 # ─────────────────────────────────────────────────────────────────
 # Step 5 — Export (single clip)
 # ─────────────────────────────────────────────────────────────────
 
-def crop_to_vertical(clip):
+def crop_to_vertical(clip, protagonist_cx: Optional[int] = None):
     target_w = int(clip.h * 9 / 16)
-    return clip.crop(x1=max((clip.w - target_w) // 2, 0), width=target_w)
+    if target_w >= clip.w:
+        return clip
+    if protagonist_cx is not None:
+        x1 = ProtagonistTracker.compute_crop_x(clip.w, target_w, protagonist_cx)
+    else:
+        x1 = max((clip.w - target_w) // 2, 0)
+    return clip.crop(x1=x1, width=target_w)
 
 
 def export_segment(
@@ -500,8 +584,29 @@ def export_segment(
         fps  = full_clip.fps or 30
         clip = full_clip.subclip(seg.start, min(seg.end, full_clip.duration)).set_fps(fps)
 
+        # Feature 2: Continuous Protagonist Tracking for 9:16 vertical crop
+        protagonist_cx = None
         if cfg.target_aspect == "9:16":
-            clip = crop_to_vertical(clip)
+            try:
+                trajectory, vis_ratio = quality_engine.tracker.track_clip(clip, sample_fps=2.0)
+                if trajectory:
+                    centers = list(trajectory.values())
+                    protagonist_cx = int(np.median(centers))
+                    print(f"  👤 Protagonist tracked ({int(vis_ratio*100)}% visible) — center x={protagonist_cx}")
+                    if "protagonist_tracking_9_16" not in seg.applied_enhancements:
+                        seg.applied_enhancements.append("protagonist_tracking_9_16")
+            except Exception as e:
+                print(f"  ⚠️ Protagonist tracking fallback ({e})")
+            clip = crop_to_vertical(clip, protagonist_cx=protagonist_cx)
+
+        # Feature 9: Professional audio boundary micro-fades
+        if clip.audio is not None:
+            try:
+                clip = clip.audio_fadein(0.06).audio_fadeout(0.16)
+                if "audio_boundary_fades" not in seg.applied_enhancements:
+                    seg.applied_enhancements.append("audio_boundary_fades")
+            except Exception:
+                pass
 
         # Synced captions — each phrase is its own timed layer
         caption_layers = []
@@ -538,7 +643,7 @@ def export_segment(
             threads      = 2,
             write_logfile= False,
         )
-        print(f"  ✅ clip_{index+1}  score={seg.viral_score}  "
+        print(f"  ✅ clip_{index+1}  [{seg.quality_tier}] score={seg.viral_score}  "
               f"{len(caption_layers)} captions  {time.time()-t0:.1f}s  →  {out_path}")
         return out_path
 
@@ -610,30 +715,42 @@ def generate_viral_clips(video_url: str, cfg: ClipConfig = ClipConfig()) -> None
 
         print(f"    Export wall time: {time.time()-t:.1f}s")
 
-        # 7. Metadata
+        # 7. Metadata & Quality Reports
         meta_path = os.path.join(output_dir, "clip_metadata.json")
-        with open(meta_path, "w") as f:
-            json.dump(
-                [
-                    {
-                        "rank":            i + 1,
-                        "start":           s.start,
-                        "end":             s.end,
-                        "duration":        round(s.duration, 2),
-                        "viral_score":     s.viral_score,
-                        "transcript":      s.transcript,
-                        "caption_phrases": [
-                            {"start": p.start, "end": p.end, "text": p.text}
-                            for p in s.caption_phrases
-                        ],
-                        "file": os.path.basename(exported[i]),
-                    }
-                    for i, s in enumerate(top)
+        clips_data = [
+            {
+                "rank":                 i + 1,
+                "start":                round(s.start, 2),
+                "end":                  round(s.end, 2),
+                "duration":             round(s.duration, 2),
+                "viral_score":          s.viral_score,
+                "quality_score":        s.quality_score,
+                "quality_tier":         s.quality_tier,
+                "technical_status":     s.technical_status,
+                "technical_issues":     s.technical_issues,
+                "quality_breakdown":    s.quality_breakdown,
+                "applied_enhancements": s.applied_enhancements,
+                "selection_reasoning":  s.selection_reasoning,
+                "transcript":           s.transcript,
+                "caption_phrases": [
+                    {"start": p.start, "end": p.end, "text": p.text}
+                    for p in s.caption_phrases
                 ],
-                f, indent=2,
-            )
+                "file":                 os.path.basename(exported[i]),
+            }
+            for i, s in enumerate(top)
+        ]
+
+        with open(meta_path, "w") as f:
+            json.dump(clips_data, f, indent=2)
+
+        # Generate human-readable Markdown and structured JSON quality reports
+        report_md_path = os.path.join(output_dir, "quality_report.md")
+        report_json_path = os.path.join(output_dir, "quality_report.json")
+        quality_engine.generate_quality_report(clips_data, report_json_path, report_md_path)
 
         print(f"\n📋  Metadata: {meta_path}")
+        print(f"📊  Quality Report: {report_md_path}")
         print(f"✅  Done in {time.time()-wall_t:.1f}s total\n")
 
     finally:

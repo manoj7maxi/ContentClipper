@@ -2,9 +2,7 @@
 
 **ContentClipper** is an automated, AI-driven video intelligence pipeline that transforms long-form videos into high-retention, monetization-ready short-form content (YouTube Shorts, TikTok, Instagram Reels).
 
-The system operates in a two-stage pipeline:
-1. **Extraction & Scoring (`SmartViralClipper.py`)**: Ingests videos, eliminates dead air, transcribes speech with word-level timestamps using OpenAI Whisper, scores segments using multi-factor viral heuristics, and exports candidate clips with synced captions.
-2. **Post-Processing & Retention Enhancement (`PostProcessing.py`)**: Converts clips to vertical 9:16 format, applies retention zooms with OpenCV face tracking, layers hook headlines and TTS commentary, and renders using Apple Silicon hardware-accelerated encoders (`h264_videotoolbox` / `hevc_videotoolbox`).
+Equipped with an integrated **Clip Quality Engine (`ClipQualityEngine.py`)**, ContentClipper evaluates candidate clips across 8 weighted criteria, continuously tracks protagonists in vertical 9:16 framing, synchronizes cuts to musical beats, masters audio to broadcast standards (-14 LUFS), and outputs comprehensive quality reports.
 
 ---
 
@@ -17,34 +15,64 @@ Long-Form Video (YouTube URL or Local File)
          [ Stage 1: SmartViralClipper ]
          ├─ Vectorized NumPy Silence Stripping
          ├─ Whisper Speech-to-Text & Word Timestamps
-         ├─ Multi-Factor Viral Scoring (Energy + Density + Sentiment)
-         └─ Initial 9:16 Export with Burned-In Captions
+         ├─ Sliding-Window Candidate Generation (Sentence Boundary Alignment)
+         ├─ Clip Quality Engine Evaluation (8 Weighted Criteria)
+         ├─ Non-Maximum Suppression (NMS) to eliminate overlaps
+         ├─ Protagonist Tracking for 9:16 Vertical Cropping
+         ├─ Audio Boundary Micro-Fades
+         └─ Export with Burned-In Captions
                      │
                      ▼
-             viral_clips/  +  clip_metadata.json
+             viral_clips/  +  clip_metadata.json  +  quality_report.md
                      │
                      ▼
          [ Stage 2: PostProcessing Engine ]
-         ├─ Face Detection & Smart Dynamic Zooming (OpenCV)
+         ├─ Continuous Protagonist Centering (OpenCV)
+         ├─ Beat Detection & Beat-Synchronized Pattern Interrupt Flash
          ├─ Attention Hook Banners & Engagement Overlays
          ├─ AI Hook Commentary (gTTS) & Audio Ducking
-         ├─ Loop Audio Transitions & Color Grading
+         ├─ Audio Loudness Mastering (-14 LUFS) & Soft Limiting
+         ├─ Seamless Loop Audio & Video Transitions
          └─ VideoToolbox Hardware Encoding (HEVC/H.264)
                      │
                      ▼
-        viral_clips_enhanced/  +  enhanced_metadata.json
+        viral_clips_enhanced/  +  enhanced_metadata.json  +  quality_report.md
 ```
+
+---
+
+## Clip Quality Engine (`ClipQualityEngine.py`)
+
+Every candidate clip is evaluated from 0–100 using 8 weighted criteria:
+
+| Criterion | Weight | What It Analyzes |
+|:---|:---:|:---|
+| **Hook Strength** | **20%** | Opening 1–2s vocal onset energy, trigger words, questions, absence of weak fillers (`"because"`, `"so"`). |
+| **Emotional Impact** | **15%** | High-arousal sentiment words, acoustic pitch/energy dynamic range, expressive punctuation, visual motion. |
+| **Protagonist Visibility** | **15%** | Percentage of frames where the primary protagonist is detected, centered, and prominent. |
+| **Pacing** | **15%** | Words-per-second (target: 2.3–3.8 wps), elimination of awkward dead-air pauses ($>1.2$s). |
+| **Story Continuity** | **10%** | Clean opening thought, complete sentence termination (`.`, `?`, `!`), narrative arc suitability. |
+| **Audio Synchronization** | **10%** | Cut and transition alignment to musical beats and speech cadence. |
+| **Visual Composition** | **10%** | Rule-of-thirds/centering, vertical 9:16 framing, adherence to mobile UI safe margins. |
+| **Ending / Rewatchability** | **5%** | Punchline/dramatic payoff, natural audio cushion, seamless loop potential. |
+
+### Quality Tiers & Technical Health
+- **PRIORITY ($\ge 80$)**: Highest viral potential; recommended for immediate publishing.
+- **REVIEW ($65 - 79$)**: Solid candidate with minor pacing or composition adjustments suggested.
+- **RECONSIDER ($< 65$)**: Lower-scoring candidate; preserved as a fallback.
+- **Technical Status (`PASS` / `FAIL`)**: Technical issues (silent audio, invalid aspect ratio, video clipping) are validated independently from engagement scores.
 
 ---
 
 ## Key Features
 
-- **High-Performance Audio Ingestion**: Audio is loaded directly into RAM as a NumPy array; all volume and energy queries run via array slicing without redundant disk I/O.
-- **Accurate Subtitles**: Whisper AI timestamping aligned via binary search (`bisect`), rendered with caching for instant frame lookups.
-- **Viral Potential Scoring**: Evaluates audio amplitude dynamics, speech tempo/density, and emotional or punchline markers.
-- **Smart Framing & Retention Zoom**: Converts horizontal footage into 9:16 vertical shorts, using Haar cascade face detection to automatically center speakers during dynamic zooms.
-- **AI Hook Commentary**: Generates contextual voiceover intros using `gTTS`, smoothly ducking primary audio.
-- **Apple Silicon Hardware Acceleration**: Uses `h264_videotoolbox` and `hevc_videotoolbox` for fast, power-efficient exports on macOS M-series chips.
+1. **Intelligent Hook Detection**: Analyzes opening moments, removing leading silence and weak sentence starters.
+2. **Continuous Protagonist Tracking**: Uses multi-frame face detection with exponential moving average (EMA) smoothing and deadband inertia to keep the main character centered in 9:16 vertical video without jitter.
+3. **Music & Beat Synchronization**: SciPy-based onset and novelty detection snaps cut transitions and visual flashes to musical beats.
+4. **Professional Audio Mastering**: Loudness normalization targeting -14 LUFS, soft peak limiting (max -1 dBFS), high-pass rumble filtering ($>80$ Hz), and smooth 50–150ms boundary fades.
+5. **Non-Maximum Suppression (NMS)**: Eliminates duplicate clips with overlapping time windows.
+6. **Detailed Quality Reporting**: Automatically generates `quality_report.json` and human-readable `quality_report.md` summarizing why each clip was selected and which improvements were applied.
+7. **Apple Silicon Hardware Acceleration**: Uses `h264_videotoolbox` and `hevc_videotoolbox` for high-speed, power-efficient exports on macOS M-series chips.
 
 ---
 
@@ -65,7 +93,7 @@ Long-Form Video (YouTube URL or Local File)
 
 ## Installation
 
-Clone the repository and install the dependencies:
+Clone the repository and install dependencies:
 
 ```bash
 git clone git@github.com:manoj7maxi/ContentClipper.git
@@ -78,7 +106,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Stage 1: Generate Viral Clips
+### Stage 1: Generate Viral Clips with Quality Engine
 
 Download and extract the top viral moments from any YouTube video or local media file:
 
@@ -104,9 +132,9 @@ python SmartViralClipper.py "https://www.youtube.com/watch?v=EXAMPLE_ID"
 
 ---
 
-### Stage 2: Post-Processing & Enhancement
+### Stage 2: Post-Processing & Cinematic Enhancement
 
-Enhance the extracted clips with dynamic zooms, hook headlines, AI audio commentary, and hardware encoding:
+Enhance the extracted clips with beat-synchronized flashes, hook headlines, AI audio commentary, and hardware encoding:
 
 ```bash
 python PostProcessing.py
@@ -129,17 +157,31 @@ python PostProcessing.py
 
 ---
 
+## Running Automated Tests
+
+Run the test suite to verify scoring weights, protagonist tracking, beat detection, and audio mastering:
+
+```bash
+python test_quality_engine.py
+```
+
+---
+
 ## Directory Structure
 
 ```text
-├── SmartViralClipper.py             # Stage 1 extraction & viral scoring script
+├── ClipQualityEngine.py            # 8-criteria scoring, protagonist tracking, beat sync, audio mastering
+├── SmartViralClipper.py             # Stage 1 extraction, NMS selection & viral scoring script
 ├── PostProcessing.py               # Stage 2 video post-processing & enhancement
+├── test_quality_engine.py          # Comprehensive test suite
 ├── requirements.txt                # Python dependencies
 ├── .gitignore                      # Ignores large video formats (*.mp4, etc.)
 ├── viral_clips/
-│   └── clip_metadata.json          # Metadata & transcript timestamps from Stage 1
+│   ├── clip_metadata.json          # Extended metadata with quality metrics
+│   └── quality_report.md           # Markdown quality assessment report
 └── viral_clips_enhanced/
-    └── enhanced_metadata.json      # Final metrics & enhancement summary from Stage 2
+    ├── enhanced_metadata.json      # Final metrics & enhancement summary
+    └── quality_report.md           # Comprehensive quality report for enhanced clips
 ```
 
 ---

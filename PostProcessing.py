@@ -46,6 +46,13 @@ from moviepy.editor import (
 from moviepy.audio.AudioClip import AudioArrayClip
 from pydub import AudioSegment
 
+from ClipQualityEngine import (
+    quality_engine,
+    BeatDetector,
+    ProtagonistTracker,
+    AudioMastering,
+)
+
 
 # ─────────────────────────────────────────────────────────────────
 # Configuration
@@ -342,54 +349,34 @@ def make_flash_clip(video_w: int, video_h: int, duration: float = 0.15) -> Color
 def ensure_9_16(clip, face_detect: bool = True):
     """
     Ensure clip is 9:16. If already correct, returns as-is (no re-encode waste).
-    Attempts face-detection centre-crop if OpenCV available.
+    If cropping is needed, uses ProtagonistTracker to track the main actor across
+    the clip and center the vertical frame on the protagonist.
     Falls back to geometric centre crop. Always validates crop bounds.
     """
     w, h     = clip.w, clip.h
     target_w = int(h * 9 / 16)
 
-    # ── Safety guard (Bug 3) ─────────────────────────────────────
-    # If target_w is invalid (zero, negative, or wider than source),
-    # cropping would produce a 1-pixel or nonsense result — skip entirely.
+    # Safety guard: invalid target width
     if target_w <= 0 or target_w > w:
         return clip
 
     if w == target_w:
         return clip   # already 9:16 — no crop needed
 
-    # ── Face detection (Bug 2) ────────────────────────────────────
+    # Continuous protagonist tracking
     if face_detect:
         try:
-            import cv2
-            sample_t  = clip.duration * 0.25
-            frame_rgb = clip.get_frame(sample_t)
-            frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-            gray      = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
-
-            cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-            cascade      = cv2.CascadeClassifier(cascade_path)
-            faces        = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4)
-
-            if len(faces) > 0:
-                fx, fy, fw, fh = max(faces, key=lambda f: f[2] * f[3])
-                face_cx = fx + fw // 2
-                # Clamp x1 so crop window always fits within frame (Bug 2)
-                x1 = face_cx - target_w // 2
-                x1 = max(0, min(x1, w - target_w))   # never negative, never overflows
-
-                # Final sanity check — reject if resulting width would be wrong
-                if x1 >= 0 and (x1 + target_w) <= w and target_w > 1:
-                    print(f"  👤 Face detected — smart crop at x={x1}")
-                    return clip.crop(x1=x1, width=target_w)
-                else:
-                    print(f"  ⚠️  Face crop invalid (x1={x1}, target_w={target_w}) — centre crop fallback")
-
-        except ImportError:
-            pass   # OpenCV not installed — fall through
+            trajectory, vis_ratio = quality_engine.tracker.track_clip(clip, sample_fps=2.0)
+            if trajectory:
+                centers = list(trajectory.values())
+                face_cx = int(np.median(centers))
+                x1 = ProtagonistTracker.compute_crop_x(w, target_w, face_cx)
+                print(f"  👤 Protagonist tracked ({int(vis_ratio*100)}% visible) — smart crop at x={x1}")
+                return clip.crop(x1=x1, width=target_w)
         except Exception as e:
-            print(f"  ⚠️  Face detection failed ({e}) — using centre crop")
+            print(f"  ⚠️  Face tracking failed ({e}) — using centre crop")
 
-    # ── Geometric centre crop fallback ────────────────────────────
+    # Geometric centre crop fallback
     x1 = max((w - target_w) // 2, 0)
     x1 = min(x1, w - target_w)   # ensure right edge never exceeds frame
     return clip.crop(x1=x1, width=target_w)
@@ -695,9 +682,22 @@ def process_clip(
         "features":      [],
     }
 
-    # ── Feature 5: Smart crop to 9:16 ──────────────────────────
+    # ── Feature 5: Beat detection for audio-visual synchronization ───
+    beats = []
+    if clip.audio is not None:
+        try:
+            sound_arr = clip.audio.to_soundarray(fps=16000)
+            beats = BeatDetector.detect_beats(sound_arr, 16000)
+            if beats:
+                enhanced_meta["features"].append("beat_detection")
+                print(f"  🎵 Detected {len(beats)} musical/rhythm beats")
+        except Exception as e:
+            print(f"  ⚠️  Beat detection note ({e})")
+
+    # ── Feature 5: Smart crop to 9:16 (with protagonist tracking) ───
     clip = ensure_9_16(clip)
     print(f"  📐 Aspect: {clip.w}×{clip.h}")
+    enhanced_meta["features"].append("protagonist_tracking_9_16")
 
     # ── Feature 4: Zoom (first 3 seconds) ──────────────────────
     if cfg.zoom:
@@ -741,14 +741,24 @@ def process_clip(
         except Exception as e:
             print(f"  ⚠️  Audio ducking failed ({e}) — using original audio")
 
-    # ── Feature 4: Pattern interrupt flash at 3s ───────────────
+    # ── Feature 9: Professional Audio Boundary Fades ───────────
+    if clip.audio is not None:
+        try:
+            clip = clip.audio_fadein(0.06).audio_fadeout(0.16)
+            enhanced_meta["features"].append("audio_boundary_fades")
+        except Exception:
+            pass
+
+    # ── Feature 4: Pattern interrupt flash (Beat-Synchronized) ──
     if cfg.zoom and clip.duration > 3.2:
+        flash_t = BeatDetector.snap_to_nearest_beat(3.0, beats, tolerance_sec=0.45)
         flash = (
             make_flash_clip(clip.w, clip.h, duration=0.12)
-            .set_start(3.0)
+            .set_start(flash_t)
         )
         clip  = CompositeVideoClip([clip, flash], size=(clip.w, clip.h)).set_fps(fps)
-        enhanced_meta["features"].append("pattern_interrupt")
+        enhanced_meta["features"].append("beat_synced_flash")
+        print(f"  🥁 Pattern interrupt flash beat-synced at t={flash_t:.2f}s")
 
     # ── Feature 3: Monetization labels ─────────────────────────
     layers = [clip]
@@ -840,7 +850,13 @@ def run(cfg: PostConfig) -> None:
             try:
                 enhanced = process_clip(clip_path, meta, cfg, tmp_dir, i)
                 # Merge original metadata fields with enhanced fields
-                merged = {**meta, **enhanced, "original_metadata": meta}
+                applied = list(set(meta.get("applied_enhancements", []) + enhanced.get("features", [])))
+                merged = {
+                    **meta,
+                    **enhanced,
+                    "applied_enhancements": applied,
+                    "original_metadata": meta
+                }
                 all_enhanced_meta.append(merged)
             except Exception as e:
                 print(f"\n  ❌  Failed on {clip_file}: {e}")
@@ -850,14 +866,20 @@ def run(cfg: PostConfig) -> None:
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # ── Feature 8: Save enhanced metadata ──────────────────────
+    # ── Feature 8: Save enhanced metadata & Quality Reports ────
     meta_out = os.path.join(cfg.output_dir, "enhanced_metadata.json")
     with open(meta_out, "w") as f:
         json.dump(all_enhanced_meta, f, indent=2)
 
+    # Generate comprehensive Quality Reports (JSON & Markdown)
+    report_md = os.path.join(cfg.output_dir, "quality_report.md")
+    report_json = os.path.join(cfg.output_dir, "quality_report.json")
+    quality_engine.generate_quality_report(all_enhanced_meta, report_json, report_md)
+
     total = time.time() - wall_t
     print(f"\n{'═'*55}")
     print(f"  📋  Enhanced metadata: {meta_out}")
+    print(f"  📊  Quality Report:    {report_md}")
     print(f"  ✅  All clips processed in {total:.1f}s")
     print(f"{'═'*55}\n")
 
