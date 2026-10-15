@@ -174,5 +174,54 @@ class TestClipQualityEngine(unittest.TestCase):
                 self.assertIn("clip_1_score85.mp4", content)
 
 
+class TestCaptionAndEndingEngine(unittest.TestCase):
+
+    def test_caption_wrapping_and_scaling(self):
+        """Verify caption wrapping keeps lines within mobile character limits."""
+        from SmartViralClipper import _wrap_caption_text, _render_caption_cached
+        text = "This is a very long sentence that would normally exceed the mobile screen width"
+        wrapped = _wrap_caption_text(text, max_chars_per_line=20)
+        lines = wrapped.split("\n")
+        self.assertGreater(len(lines), 1)
+        for line in lines:
+            self.assertLessEqual(len(line), 25)
+
+        # Ensure render caching produces valid image buffers
+        rgb_b, alpha_b, (h, w) = _render_caption_cached(text, 607, 1080, 44, 760)
+        self.assertEqual(h, 1080)
+        self.assertEqual(w, 607)
+        self.assertGreater(len(rgb_b), 0)
+        self.assertEqual(len(rgb_b), len(alpha_b) * 3)
+
+    def test_complete_thought_avoidance_of_dangling_words(self):
+        """Ensure segments never cut off on prepositions or conjunctions."""
+        from SmartViralClipper import build_and_score_segments, ClipConfig, DANGLING_END_WORDS
+        sample_rate = 16000
+        audio = np.zeros(sample_rate * 25, dtype=np.float32)
+        cfg = ClipConfig(min_clip_duration=10.0, max_clip_duration=30.0)
+
+        sent_segs = [
+            {"start": 0.0, "end": 4.0, "text": "Here is an amazing demonstration of science."},
+            {"start": 4.2, "end": 8.5, "text": "We combined two powerful materials together and"},
+            {"start": 8.7, "end": 14.0, "text": "the reaction happened instantly."},
+            {"start": 14.5, "end": 18.0, "text": "This occurred because"}
+        ]
+        all_words = [
+            {"start": 0.0, "end": 1.0, "word": "Here"},
+            {"start": 13.5, "end": 14.0, "word": "instantly."}
+        ]
+
+        ranked = build_and_score_segments(sent_segs, all_words, audio, sample_rate, cfg)
+        self.assertGreater(len(ranked), 0)
+        best = ranked[0]
+        # Should not end with dangling words
+        last_word = best.transcript.rstrip(" .!?,;:\"'").split()[-1].lower()
+        self.assertNotIn(last_word, DANGLING_END_WORDS)
+        # Should contain complete_thought_ending
+        self.assertIn("complete_thought_ending", best.applied_enhancements)
+        # Speech cushion applied
+        self.assertGreater(best.end, 14.0)
+
+
 if __name__ == "__main__":
     unittest.main()

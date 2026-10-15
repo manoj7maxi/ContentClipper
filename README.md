@@ -72,7 +72,9 @@ Every candidate clip is evaluated from 0–100 using 8 weighted criteria:
 4. **Professional Audio Mastering**: Loudness normalization targeting -14 LUFS, soft peak limiting (max -1 dBFS), high-pass rumble filtering ($>80$ Hz), and smooth 50–150ms boundary fades.
 5. **Non-Maximum Suppression (NMS)**: Eliminates duplicate clips with overlapping time windows.
 6. **Detailed Quality Reporting**: Automatically generates `quality_report.json` and human-readable `quality_report.md` summarizing why each clip was selected and which improvements were applied.
-7. **Apple Silicon Hardware Acceleration**: Uses `h264_videotoolbox` and `hevc_videotoolbox` for high-speed, power-efficient exports on macOS M-series chips.
+7. **Automatic Language Detection & Translation**: Automatically detects any spoken language in the audio via Whisper mel spectrograms and translates non-English audio to fluent, well-synced English captions with safe mobile 9:16 margins.
+8. **Complete Thought Boundary Closure**: Prevents abrupt cutoffs by rejecting candidate clips that end on dangling words (conjunctions, prepositions, filler words) and requiring terminal punctuation or natural pauses. Appends an intelligent 0.75s speech cushion and smooth audio/video fadeouts.
+9. **Apple Silicon Hardware Acceleration**: Uses `h264_videotoolbox` and `hevc_videotoolbox` for high-speed, power-efficient exports on macOS M-series chips.
 
 ---
 
@@ -123,9 +125,10 @@ python SmartViralClipper.py "https://www.youtube.com/watch?v=EXAMPLE_ID"
 | `--min-duration` | `15.0` | Minimum clip duration (seconds) |
 | `--max-duration` | `90.0` | Maximum clip duration (seconds) |
 | `--silence-db` | `-40` | Silence threshold in dB for cutoffs |
-| `--words-per-phrase` | `5` | Caption chunk size |
-| `--caption-fontsize` | `52` | Subtitle font size |
+| `--words-per-phrase` | `4` | Number of words shown together per subtitle phrase |
+| `--caption-fontsize` | `44` | Subtitle base font size (auto-scaled for mobile) |
 | `--no-captions` | `False` | Disable burning captions into video |
+| `--no-translate` | `False` | Disable automatic translation to English captions for foreign language videos |
 | `--keep-aspect` | `False` | Preserve original aspect ratio instead of 9:16 |
 | `--preset` | `fast` | x264 preset (`ultrafast`, `fast`, `medium`, etc.) |
 | `--bitrate` | `6M` | Video target bitrate |
