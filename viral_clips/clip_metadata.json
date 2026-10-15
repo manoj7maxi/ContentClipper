@@ -1,0 +1,760 @@
+[
+  {
+    "rank": 1,
+    "start": 357.44,
+    "end": 445.18,
+    "duration": 87.74,
+    "viral_score": 53.3,
+    "transcript": "Because we brought out Adam, who is one of the most insanely accurate football kickers in the entire world. Going up against the most powerful football-kicking robot. I was going to see who could kick further. You are the robot. But kick it. Yeah, yeah. So instead, we're going to do an accuracy challenge. And the rules couldn't be simpler. First one to kick the ball and hit the target with. Adam, do it for humanity. All right, let's see it. For humanity. Do you even make it in the field goal? Oh, boy. We're not off to a good start here. That's awkward. That's awkward.  We know this robot can kick four. But can it kick more? Or accurately than a human? Oh, that was cool. Humanity lives to see another day. Any last words? None. Is that it? Oh, Adam, have you ever thought about not missing? Everybody misses. Oh, whoa, whoa, whoa. Whenever you're ready, Adam, this might be your last chance. You think? I really do think it is. Well, let's actually put it between the posts, huh? Yeah. That's a dude. Adam, you might be causing the downfall of the human race right now. It's not looking so hot for Adam, bro. Three, two, one, four. Oh.",
+    "caption_phrases": [
+      {
+        "start": 357.44,
+        "end": 359.03,
+        "text": "Because we brought out Adam,"
+      },
+      {
+        "start": 359.18,
+        "end": 359.98999999999995,
+        "text": "who is one of the"
+      },
+      {
+        "start": 359.84,
+        "end": 362.04999999999995,
+        "text": "most insanely accurate football kickers"
+      },
+      {
+        "start": 361.9,
+        "end": 364.54999999999995,
+        "text": "in the entire world. Going"
+      },
+      {
+        "start": 364.4,
+        "end": 366.51,
+        "text": "up against the most powerful"
+      },
+      {
+        "start": 366.36,
+        "end": 368.37,
+        "text": "football -kicking robot. I was"
+      },
+      {
+        "start": 368.22,
+        "end": 369.21,
+        "text": "going to see who could"
+      },
+      {
+        "start": 369.06,
+        "end": 370.27,
+        "text": "kick further. You are the"
+      },
+      {
+        "start": 370.12,
+        "end": 378.92999999999995,
+        "text": "robot. But kick it. Yeah,"
+      },
+      {
+        "start": 379.0,
+        "end": 381.27,
+        "text": "yeah. So instead, we're going"
+      },
+      {
+        "start": 381.12,
+        "end": 382.69,
+        "text": "to do an accuracy challenge."
+      },
+      {
+        "start": 382.92,
+        "end": 384.15,
+        "text": "And the rules couldn't be"
+      },
+      {
+        "start": 384.0,
+        "end": 385.75,
+        "text": "simpler. First one to kick"
+      },
+      {
+        "start": 385.6,
+        "end": 386.87,
+        "text": "the ball and hit the"
+      },
+      {
+        "start": 386.72,
+        "end": 388.45,
+        "text": "target with. Adam, do it"
+      },
+      {
+        "start": 388.3,
+        "end": 389.98999999999995,
+        "text": "for humanity. All right, let's"
+      },
+      {
+        "start": 389.84,
+        "end": 395.83,
+        "text": "see it. For humanity. Do"
+      },
+      {
+        "start": 395.68,
+        "end": 396.83,
+        "text": "you even make it in"
+      },
+      {
+        "start": 396.68,
+        "end": 397.89,
+        "text": "the field goal? Oh, boy."
+      },
+      {
+        "start": 397.94,
+        "end": 398.78999999999996,
+        "text": "We're not off to a"
+      },
+      {
+        "start": 398.64,
+        "end": 399.81,
+        "text": "good start here. That's awkward."
+      },
+      {
+        "start": 399.76,
+        "end": 401.57,
+        "text": "That's awkward. We know this"
+      },
+      {
+        "start": 401.42,
+        "end": 403.09,
+        "text": "robot can kick four. But"
+      },
+      {
+        "start": 402.94,
+        "end": 404.03,
+        "text": "can it kick more? Or"
+      },
+      {
+        "start": 403.88,
+        "end": 405.65,
+        "text": "accurately than a human? Oh,"
+      },
+      {
+        "start": 406.1,
+        "end": 408.65,
+        "text": "that was cool. Humanity lives"
+      },
+      {
+        "start": 408.5,
+        "end": 410.15,
+        "text": "to see another day. Any"
+      },
+      {
+        "start": 410.0,
+        "end": 413.46999999999997,
+        "text": "last words? None. Is that"
+      },
+      {
+        "start": 413.32,
+        "end": 417.07,
+        "text": "it? Oh, Adam, have you"
+      },
+      {
+        "start": 416.92,
+        "end": 418.53,
+        "text": "ever thought about not missing?"
+      },
+      {
+        "start": 418.54,
+        "end": 421.96999999999997,
+        "text": "Everybody misses. Oh, whoa, whoa,"
+      },
+      {
+        "start": 422.0,
+        "end": 424.13,
+        "text": "whoa. Whenever you're ready, Adam,"
+      },
+      {
+        "start": 424.42,
+        "end": 425.37,
+        "text": "this might be your last"
+      },
+      {
+        "start": 425.22,
+        "end": 426.89,
+        "text": "chance. You think? I really"
+      },
+      {
+        "start": 426.74,
+        "end": 427.72999999999996,
+        "text": "do think it is. Well,"
+      },
+      {
+        "start": 427.58,
+        "end": 428.51,
+        "text": "let's actually put it between"
+      },
+      {
+        "start": 428.36,
+        "end": 431.96999999999997,
+        "text": "the posts, huh? Yeah. That's"
+      },
+      {
+        "start": 431.82,
+        "end": 434.37,
+        "text": "a dude. Adam, you might"
+      },
+      {
+        "start": 434.22,
+        "end": 435.66999999999996,
+        "text": "be causing the downfall of"
+      },
+      {
+        "start": 435.52,
+        "end": 436.48999999999995,
+        "text": "the human race right now."
+      },
+      {
+        "start": 436.46,
+        "end": 437.10999999999996,
+        "text": "It's not looking so hot"
+      },
+      {
+        "start": 436.96,
+        "end": 439.04999999999995,
+        "text": "for Adam, bro. Three, two,"
+      },
+      {
+        "start": 439.24,
+        "end": 445.33,
+        "text": "one, four. Oh."
+      }
+    ],
+    "file": "clip_1_score53.mp4"
+  },
+  {
+    "rank": 2,
+    "start": 628.88,
+    "end": 718.58,
+    "duration": 89.7,
+    "viral_score": 47.3,
+    "transcript": "So far, it's been a minute and one second. We look how fast it's in these turns. Are we okay? Is it 140 now? Anything around two minutes is like a really good lap time on this track. We'll get some two minutes. Here it comes. Whoa. The AI car has finished its lap. What is it?  Two minutes and one second is the time to beat. This is your car, the same exact model as the AI drove. It looks fast. Let's get in. Remember, George, the fate of humanity could rest on this race. All right. You ready for this, man? Three. Two. One. Go! What was better? Man versus robot. Let's go! Go, George! I run the corner flawlessly. Holy crap. Oh, God. It's twisted there. Oh, you can't hear it, Roy. Oh, we're going to deep. We're almost in a gravel. At this point, I was getting pretty scared. Oh, my gosh. You're going 220 kilometers an hour. Let's show the AI. Who's boss? Who can turn off to the end? Not into my watch. George, all you can do it! Oh, I hear a lot of screeching. Is that bad? That's not what we need. Is it okay? You're currently two seconds behind where the AI car was at this point in the race. This is crazy. That was about quarter. Come on. You are very random. You can recover. You got this. 10 seconds. Come on. You got this door. You're catching up. You're catching up. I can't. Yeah. Come on. Oh, my gosh.",
+    "caption_phrases": [
+      {
+        "start": 628.88,
+        "end": 630.03,
+        "text": "So far, it's been a"
+      },
+      {
+        "start": 629.88,
+        "end": 631.17,
+        "text": "minute and one second. We"
+      },
+      {
+        "start": 631.02,
+        "end": 632.1899999999999,
+        "text": "look how fast it's in"
+      },
+      {
+        "start": 632.04,
+        "end": 633.27,
+        "text": "these turns. Are we okay?"
+      },
+      {
+        "start": 633.2,
+        "end": 634.67,
+        "text": "Is it 140 now? Anything"
+      },
+      {
+        "start": 634.52,
+        "end": 636.01,
+        "text": "around two minutes is like"
+      },
+      {
+        "start": 635.86,
+        "end": 637.03,
+        "text": "a really good lap time"
+      },
+      {
+        "start": 636.88,
+        "end": 638.01,
+        "text": "on this track. We'll get"
+      },
+      {
+        "start": 637.86,
+        "end": 639.41,
+        "text": "some two minutes. Here it"
+      },
+      {
+        "start": 639.26,
+        "end": 641.75,
+        "text": "comes. Whoa. The AI car"
+      },
+      {
+        "start": 641.6,
+        "end": 643.43,
+        "text": "has finished its lap. What"
+      },
+      {
+        "start": 643.28,
+        "end": 645.49,
+        "text": "is it? Two minutes and"
+      },
+      {
+        "start": 645.34,
+        "end": 646.91,
+        "text": "one second is the time"
+      },
+      {
+        "start": 646.76,
+        "end": 647.85,
+        "text": "to beat. This is your"
+      },
+      {
+        "start": 647.7,
+        "end": 649.5699999999999,
+        "text": "car, the same exact model"
+      },
+      {
+        "start": 649.42,
+        "end": 650.87,
+        "text": "as the AI drove. It"
+      },
+      {
+        "start": 650.72,
+        "end": 651.85,
+        "text": "looks fast. Let's get in."
+      },
+      {
+        "start": 652.0,
+        "end": 653.7099999999999,
+        "text": "Remember, George, the fate of"
+      },
+      {
+        "start": 653.56,
+        "end": 655.37,
+        "text": "humanity could rest on this"
+      },
+      {
+        "start": 655.22,
+        "end": 656.53,
+        "text": "race. All right. You ready"
+      },
+      {
+        "start": 656.38,
+        "end": 659.27,
+        "text": "for this, man? Three. Two."
+      },
+      {
+        "start": 659.96,
+        "end": 664.81,
+        "text": "One. Go! What was better?"
+      },
+      {
+        "start": 664.96,
+        "end": 667.13,
+        "text": "Man versus robot. Let's go!"
+      },
+      {
+        "start": 667.46,
+        "end": 670.13,
+        "text": "Go, George! I run the"
+      },
+      {
+        "start": 669.98,
+        "end": 672.87,
+        "text": "corner flawlessly. Holy crap. Oh,"
+      },
+      {
+        "start": 673.34,
+        "end": 675.29,
+        "text": "God. It's twisted there. Oh,"
+      },
+      {
+        "start": 675.2,
+        "end": 676.31,
+        "text": "you can't hear it, Roy."
+      },
+      {
+        "start": 677.0,
+        "end": 677.91,
+        "text": "Oh, we're going to deep."
+      },
+      {
+        "start": 677.94,
+        "end": 678.73,
+        "text": "We're almost in a gravel."
+      },
+      {
+        "start": 678.92,
+        "end": 680.09,
+        "text": "At this point, I was"
+      },
+      {
+        "start": 679.94,
+        "end": 681.89,
+        "text": "getting pretty scared. Oh, my"
+      },
+      {
+        "start": 681.74,
+        "end": 683.99,
+        "text": "gosh. You're going 220 kilometers"
+      },
+      {
+        "start": 683.84,
+        "end": 685.29,
+        "text": "an hour. Let's show the"
+      },
+      {
+        "start": 685.14,
+        "end": 686.89,
+        "text": "AI. Who's boss? Who can"
+      },
+      {
+        "start": 686.74,
+        "end": 688.05,
+        "text": "turn off to the end?"
+      },
+      {
+        "start": 688.16,
+        "end": 689.81,
+        "text": "Not into my watch. George,"
+      },
+      {
+        "start": 689.76,
+        "end": 691.1899999999999,
+        "text": "all you can do it!"
+      },
+      {
+        "start": 692.54,
+        "end": 693.5699999999999,
+        "text": "Oh, I hear a lot"
+      },
+      {
+        "start": 693.42,
+        "end": 694.91,
+        "text": "of screeching. Is that bad?"
+      },
+      {
+        "start": 695.04,
+        "end": 697.15,
+        "text": "That's not what we need."
+      },
+      {
+        "start": 697.14,
+        "end": 698.4499999999999,
+        "text": "Is it okay? You're currently"
+      },
+      {
+        "start": 698.3,
+        "end": 699.91,
+        "text": "two seconds behind where the"
+      },
+      {
+        "start": 699.76,
+        "end": 701.3299999999999,
+        "text": "AI car was at this"
+      },
+      {
+        "start": 701.18,
+        "end": 702.17,
+        "text": "point in the race. This"
+      },
+      {
+        "start": 702.02,
+        "end": 703.67,
+        "text": "is crazy. That was about"
+      },
+      {
+        "start": 703.52,
+        "end": 705.8299999999999,
+        "text": "quarter. Come on. You are"
+      },
+      {
+        "start": 705.68,
+        "end": 707.59,
+        "text": "very random. You can recover."
+      },
+      {
+        "start": 707.6,
+        "end": 709.0699999999999,
+        "text": "You got this. 10 seconds."
+      },
+      {
+        "start": 709.36,
+        "end": 710.55,
+        "text": "Come on. You got this"
+      },
+      {
+        "start": 710.4,
+        "end": 712.29,
+        "text": "door. You're catching up. You're"
+      },
+      {
+        "start": 712.14,
+        "end": 717.3299999999999,
+        "text": "catching up. I can't. Yeah."
+      },
+      {
+        "start": 717.5,
+        "end": 718.73,
+        "text": "Come on. Oh, my gosh."
+      }
+    ],
+    "file": "clip_2_score47.mp4"
+  },
+  {
+    "rank": 3,
+    "start": 268.54,
+    "end": 357.34,
+    "duration": 88.8,
+    "viral_score": 46.3,
+    "transcript": "I can't hit that. Dude, he's like mocking you. I let him rip. Oh. Why is this so fast? Seven more to go. Here comes. Here comes. Oh, that's gas. Yo, is Neil celebrating over there? Robots are going to win. Yo, it a four-night e-mode out of. I don't like Neil. I hate him. Your trash. Stop doing the e-mode on me. I can seal the wind off of it. It's getting massed here every time. Oh, yeah. Oh, he almost hit Neil. Eric, you hit the ball, but remember, you need a home run to win. I got this. Neil, you're going down, machine. Trying to hit this clown. Humans are not obsolete. Do we're for mankind? Eric, you have four pitches left. Do you think you got this? You've got to believe for humans. Believes. Oh, no. Oh, no. Get out. Get out. Get out. I don't like humans. Let's go. It did. 150 miles an hour. Meaning, this is one of the fastest pitches a human being has ever hit. Neil, can you crown the human with this $10,000 golden medal? No, no. No, you didn't win. This is the worst moment of my life. Ha, ha, ha. Where are you? You only made the robot rage quit. But that's another point for you, Mandy. Giving the humans a two-and-a-half leap. So let's see if the robots can kick their way back into this.",
+    "caption_phrases": [
+      {
+        "start": 268.54,
+        "end": 270.16999999999996,
+        "text": "I can't hit that. Dude,"
+      },
+      {
+        "start": 270.08,
+        "end": 271.60999999999996,
+        "text": "he's like mocking you. I"
+      },
+      {
+        "start": 271.46,
+        "end": 277.57,
+        "text": "let him rip. Oh. Why"
+      },
+      {
+        "start": 277.42,
+        "end": 279.01,
+        "text": "is this so fast? Seven"
+      },
+      {
+        "start": 278.86,
+        "end": 280.33,
+        "text": "more to go. Here comes."
+      },
+      {
+        "start": 280.34,
+        "end": 282.51,
+        "text": "Here comes. Oh, that's gas."
+      },
+      {
+        "start": 282.82,
+        "end": 284.33,
+        "text": "Yo, is Neil celebrating over"
+      },
+      {
+        "start": 284.18,
+        "end": 285.59,
+        "text": "there? Robots are going to"
+      },
+      {
+        "start": 285.44,
+        "end": 286.92999999999995,
+        "text": "win. Yo, it a four"
+      },
+      {
+        "start": 286.78,
+        "end": 287.95,
+        "text": "-night e -mode out of."
+      },
+      {
+        "start": 287.9,
+        "end": 289.04999999999995,
+        "text": "I don't like Neil. I"
+      },
+      {
+        "start": 288.9,
+        "end": 290.90999999999997,
+        "text": "hate him. Your trash. Stop"
+      },
+      {
+        "start": 290.76,
+        "end": 291.77,
+        "text": "doing the e -mode on"
+      },
+      {
+        "start": 291.62,
+        "end": 294.69,
+        "text": "me. I can seal the"
+      },
+      {
+        "start": 294.54,
+        "end": 295.87,
+        "text": "wind off of it. It's"
+      },
+      {
+        "start": 295.72,
+        "end": 297.01,
+        "text": "getting massed here every time."
+      },
+      {
+        "start": 298.62,
+        "end": 300.07,
+        "text": "Oh, yeah. Oh, he almost"
+      },
+      {
+        "start": 299.92,
+        "end": 301.15,
+        "text": "hit Neil. Eric, you hit"
+      },
+      {
+        "start": 301.0,
+        "end": 302.37,
+        "text": "the ball, but remember, you"
+      },
+      {
+        "start": 302.22,
+        "end": 303.57,
+        "text": "need a home run to"
+      },
+      {
+        "start": 303.42,
+        "end": 305.13,
+        "text": "win. I got this. Neil,"
+      },
+      {
+        "start": 305.1,
+        "end": 306.92999999999995,
+        "text": "you're going down, machine. Trying"
+      },
+      {
+        "start": 306.78,
+        "end": 308.16999999999996,
+        "text": "to hit this clown. Humans"
+      },
+      {
+        "start": 308.02,
+        "end": 309.54999999999995,
+        "text": "are not obsolete. Do we're"
+      },
+      {
+        "start": 309.4,
+        "end": 311.10999999999996,
+        "text": "for mankind? Eric, you have"
+      },
+      {
+        "start": 310.96,
+        "end": 312.53,
+        "text": "four pitches left. Do you"
+      },
+      {
+        "start": 312.38,
+        "end": 313.57,
+        "text": "think you got this? You've"
+      },
+      {
+        "start": 313.42,
+        "end": 314.51,
+        "text": "got to believe for humans."
+      },
+      {
+        "start": 314.98,
+        "end": 324.31,
+        "text": "Believes. Oh, no. Oh, no."
+      },
+      {
+        "start": 324.62,
+        "end": 326.27,
+        "text": "Get out. Get out. Get"
+      },
+      {
+        "start": 326.12,
+        "end": 331.27,
+        "text": "out. I don't like humans."
+      },
+      {
+        "start": 331.3,
+        "end": 333.90999999999997,
+        "text": "Let's go. It did. 150"
+      },
+      {
+        "start": 333.76,
+        "end": 336.04999999999995,
+        "text": "miles an hour. Meaning, this"
+      },
+      {
+        "start": 335.9,
+        "end": 337.07,
+        "text": "is one of the fastest"
+      },
+      {
+        "start": 336.92,
+        "end": 338.69,
+        "text": "pitches a human being has"
+      },
+      {
+        "start": 338.54,
+        "end": 340.51,
+        "text": "ever hit. Neil, can you"
+      },
+      {
+        "start": 340.36,
+        "end": 341.83,
+        "text": "crown the human with this"
+      },
+      {
+        "start": 341.68,
+        "end": 343.75,
+        "text": "$10 ,000 golden medal? No,"
+      },
+      {
+        "start": 343.72,
+        "end": 344.63,
+        "text": "no. No, you didn't win."
+      },
+      {
+        "start": 344.8,
+        "end": 346.03,
+        "text": "This is the worst moment"
+      },
+      {
+        "start": 345.88,
+        "end": 347.59,
+        "text": "of my life. Ha, ha,"
+      },
+      {
+        "start": 347.86,
+        "end": 348.59,
+        "text": "ha. Where are you? You"
+      },
+      {
+        "start": 348.44,
+        "end": 349.59,
+        "text": "only made the robot rage"
+      },
+      {
+        "start": 349.44,
+        "end": 351.15,
+        "text": "quit. But that's another point"
+      },
+      {
+        "start": 351.0,
+        "end": 352.45,
+        "text": "for you, Mandy. Giving the"
+      },
+      {
+        "start": 352.3,
+        "end": 353.77,
+        "text": "humans a two -and -a"
+      },
+      {
+        "start": 353.62,
+        "end": 354.96999999999997,
+        "text": "-half leap. So let's see"
+      },
+      {
+        "start": 354.82,
+        "end": 356.28999999999996,
+        "text": "if the robots can kick"
+      },
+      {
+        "start": 356.14,
+        "end": 357.48999999999995,
+        "text": "their way back into this."
+      },
+      {
+        "start": 357.44,
+        "end": 357.81,
+        "text": "Because"
+      }
+    ],
+    "file": "clip_3_score46.mp4"
+  }
+]
